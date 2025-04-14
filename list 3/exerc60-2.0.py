@@ -1,4 +1,4 @@
-print('PROGRAMA PARA "DESENHAR" TRIÂNGULOS VAZADOS')
+print('PROGRAMA PARA "DESENHAR" TRIÂNGULOS')
 
 digitou_corretamente=False
 while not digitou_corretamente:

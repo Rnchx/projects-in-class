@@ -14,10 +14,10 @@ while not digitou_o_numero_corretamente:
 
             inv = 0
 
-            while nro != 0:
+            while nro != 0: # o número que vc digitou é 12345
 
-                ultimo_nro = nro % 10
-                nro = nro // 10
-                inv = inv*10 + ultimo_nro
-            
+                ultimo_nro = nro % 10  # 5, 4, 3 ... 1
+                nro = nro // 10 # 1234, 123, 12 ... 0
+                inv = inv*10 + ultimo_nro # na primeira vez que passar pelo while o INV = 5, INV = 54, INV = 543, INV = 5432 ... INV = 54321
+
             print(inv)
