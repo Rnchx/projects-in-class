@@ -13,3 +13,18 @@ while not digitou_certo:
         else:
             digitou_certo = True
 
+possivel_divisor = 2
+metade = nro // 2
+eh_primo = True
+
+while possivel_divisor <= metade:
+    if nro % possivel_divisor == 0:
+        eh_primo = False
+        break
+
+    possivel_divisor += 1
+
+if eh_primo == True and nro != 1:
+    print(nro, "é primo")
+else:
+    print(nro, "não é primo")
