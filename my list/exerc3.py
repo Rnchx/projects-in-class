@@ -9,9 +9,10 @@ mostrar_divisores = []
 
 
 while possivel_divisor <= metade:
-    if nro % possivel_divisor == 1:
-        divisores += 1
-        mostrar_divisores.append(possivel_divisor)
+    if nro % possivel_divisor == 0:
+        if possivel_divisor % 2 == 1:
+            divisores += 1
+            mostrar_divisores.append(possivel_divisor)
     
     possivel_divisor += 1
 
