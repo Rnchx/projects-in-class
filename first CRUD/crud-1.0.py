@@ -61,6 +61,9 @@ def opcaoEscolhida (mnu):
     print()
     return umTexto('Qual é a sua opção? ', 'Opção inválida', opcoesValidas)
 
+
+
+
 '''
 procura nom em agd e, se achou, retorna:
 uma lista contendo True e a posicao onde achou;
@@ -81,10 +84,14 @@ def ondeEsta (nom,agd):
     # nome procurado ou então a lista [False,inicio], quando não
     # encontrar o nome procurado.
 
+
+
+
 def cadastrar (agd):
-    # Ficar solicitando a digitação de um nome a ser excluido da agenda,
-    # até que um nome NÃO CADASTRADO seja digitado.
-    # Solicitar então a digitação do aniversario, do endereao, do
+    print('Opção não implementada!')
+    # Ficar solicitando a digitação de um nome de um contato a ser
+    # cadastrado na agenda, até que um nome NÃO CADASTRADO seja digitado.
+    # Solicitar então a digitação do aniversario, do endereço, do
     # telefone (fixo), do celular e do e_mail da pessoa, cujo nome foi
     # digitado.
     # Gerar então uma lista conforme abaixo:
@@ -112,8 +119,8 @@ def procurar (agd):
 
 def atualizar (agd):
     print('Opção não implementada!')
-    # Ficar solicitando a digitação de um nome a ser excluido da agenda,
-    # até que um nome cadastrado seja digitado.
+    # Ficar solicitando a digitação de um nome de um contato a ser
+    # atualizado na agenda, até que um nome cadastrado seja digitado.
     # Ficar mostrando então um SUBMENU oferecendo as opções de atualizar
     # aniversário, ou endereco, ou telefone, ou celular, ou email, ou
     # finalizar as atualizações; ficar pedindo para digitar a opção até
@@ -146,6 +153,7 @@ def excluir (agd):
     # O usuário poderá desistir de excluir, escrevendo "cancela" no
     # momento de digitar o nome a ser excluído.
     
+
     
     
 # daqui para cima, definimos subprogramas (ou módulos, é a mesma coisa)
