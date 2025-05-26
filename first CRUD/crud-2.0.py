@@ -1,56 +1,71 @@
-def apresenteSe ():
+import re
+from datetime import datetime
+
+def apresenteSe():
     print('+-------------------------------------------------------------+')
     print('|                                                             |')
     print('| AGENDA PESSOAL DE ANIVERSÁRIOS E FORMAS DE CONTATAR PESSOAS |')
     print('|                                                             |')
-    print('| Profs André Carvalho & J.G.Pícolo                           |')
+    print('| João Pedro Cassan da Rocha                                  |')
     print('|                                                             |')
-    print('| Versão 1.0 de 12/maio/2025                                  |')
+    print('| Versão 2.0 de 26/05/2025                                    |')
     print('|                                                             |')
     print('+-------------------------------------------------------------+')
 
-def umTexto (solicitacao, mensagem, valido):
-    digitouDireito=False
-    while not digitouDireito:
-        txt=input(solicitacao)
-
+def umTexto(solicitacao, mensagem, valido):
+    while True:
+        txt = input(solicitacao).strip()
         if txt not in valido:
-            print(mensagem,'- Favor redigitar...')
+            print(mensagem, '- Favor redigitar...')
         else:
-            digitouDireito=True
+            return txt
 
-    return txt
-
-def opcaoEscolhida (mnu):
+def opcaoEscolhida(mnu):
     print()
-
-    opcoesValidas=[]
-    posicao=0
-    while posicao<len(mnu):
-        print (posicao+1,') ',mnu[posicao],sep='')
-        opcoesValidas.append(str(posicao+1))
-        posicao+=1
-
+    opcoesValidas = []
+    for i, item in enumerate(mnu):
+        print(f"{i+1}) {item}")
+        opcoesValidas.append(str(i+1))
     print()
     return umTexto('Qual é a sua opção? ', 'Opção inválida', opcoesValidas)
 
-def ondeEsta (nom,agd):
-    inicio=0
-    final =len(agd)-1
-    
+def ondeEsta(nom, agd):
+    inicio = 0
+    final = len(agd) - 1
     while inicio <= final:
         meio = (inicio + final) // 2
-
         if agd[meio][0] == nom:
             return [True, meio]
-        
-        elif agd[meio] > nom:
+        elif agd[meio][0] > nom:
             final = meio - 1
-
         else:
             inicio = meio + 1
-
     return [False, inicio]
+
+# Validações
+
+def validar_nome(nome):
+    padrao = re.compile(r"^[A-ZÀ-Ý][a-zà-ÿ]*(?: (?:[A-ZÀ-Ý]|[a-zà-ÿ])[a-zà-ÿ]*)*$")
+    return padrao.fullmatch(nome) is not None
+
+def validar_data(data_str):
+    try:
+        datetime.strptime(data_str, "%d/%m/%Y")
+        return True
+    except ValueError:
+        return False
+
+def validar_telefone(tel):
+    return re.fullmatch(r"\d{4}-\d{4}", tel) is not None
+
+def validar_celular(cel):
+    return re.fullmatch(r"\(\d{2}\) \d{5}-\d{4}", cel) is not None
+
+def validar_email(email):
+    return re.fullmatch(r".+@(?:gmail|hotmail|yahoo)\.com", email) is not None
+
+def validar_endereco(end):
+    return not end.isdigit() and len(end) >= 3
 
 def cadastrar(agd):
     while True:
@@ -58,37 +73,36 @@ def cadastrar(agd):
         if nome.lower() == 'cancela':
             print("Cadastro não realizado.")
             return
-        if nome == '':
-            print("Nome não pode ser vazio. Tente novamente.")
+        if not validar_nome(nome):
+            print("Nome inválido. Use letras maiúsculas no início, evite números ou símbolos.")
             continue
-
         achou, pos = ondeEsta(nome, agd)
         if achou:
             print("Nome já cadastrado. Digite outro nome.")
         else:
             aniversario = input("Digite a data de aniversário (dd/mm/aaaa): ").strip()
-            if aniversario.lower() == 'cancela':
-                print("Cadastro não realizado.")
+            if aniversario.lower() == 'cancela' or not validar_data(aniversario):
+                print("Data inválida. Cadastro cancelado.")
                 return
 
             endereco = input("Digite o endereço: ").strip()
-            if endereco.lower() == 'cancela':
-                print("Cadastro não realizado.")
+            if endereco.lower() == 'cancela' or not validar_endereco(endereco):
+                print("Endereço inválido. Cadastro cancelado.")
                 return
 
-            telefone = input("Digite o telefone fixo: ").strip()
-            if telefone.lower() == 'cancela':
-                print("Cadastro não realizado.")
+            telefone = input("Digite o telefone fixo (0000-0000): ").strip()
+            if telefone.lower() == 'cancela' or not validar_telefone(telefone):
+                print("Telefone fixo inválido. Cadastro cancelado.")
                 return
 
-            celular = input("Digite o celular: ").strip()
-            if celular.lower() == 'cancela':
-                print("Cadastro não realizado.")
+            celular = input("Digite o celular ((99) 00000-0000): ").strip()
+            if celular.lower() == 'cancela' or not validar_celular(celular):
+                print("Celular inválido. Cadastro cancelado.")
                 return
 
             email = input("Digite o e-mail: ").strip()
-            if email.lower() == 'cancela':
-                print("Cadastro não realizado.")
+            if email.lower() == 'cancela' or not validar_email(email):
+                print("E-mail inválido. Cadastro cancelado.")
                 return
 
             contato = [nome, aniversario, endereco, telefone, celular, email]
@@ -138,46 +152,66 @@ def atualizar(agd):
             while True:
                 print("\nO que deseja atualizar?")
                 opc = int(opcaoEscolhida(submenu))
+                
                 if opc == 1:
-                    novo = input("Digite o novo aniversário (ou 'cancela'): ").strip()
+                    novo = input("Digite o novo aniversário (dd/mm/aaaa) ou 'cancela': ").strip()
                     if novo.lower() == 'cancela':
-                        print("Atualização cancelada.")
-                    else:
+                        print("Atualização de aniversário cancelada.")
+                    elif validar_data(novo):
                         contato[1] = novo
-                        print("Aniversário atualizado.")
+                        print("Aniversário atualizado com sucesso.")
+                    else:
+                        print("Data inválida. Tente novamente.")
+                
                 elif opc == 2:
-                    novo = input("Digite o novo endereço (ou 'cancela'): ").strip()
+                    novo = input("Digite o novo endereço ou 'cancela': ").strip()
                     if novo.lower() == 'cancela':
-                        print("Atualização cancelada.")
-                    else:
+                        print("Atualização de endereço cancelada.")
+                    elif validar_endereco(novo):
                         contato[2] = novo
-                        print("Endereço atualizado.")
+                        print("Endereço atualizado com sucesso.")
+                    else:
+                        print("Endereço inválido (não pode ser só números). Tente novamente.")
+                
                 elif opc == 3:
-                    novo = input("Digite o novo telefone fixo (ou 'cancela'): ").strip()
+                    novo = input("Digite o novo telefone fixo (0000-0000) ou 'cancela': ").strip()
                     if novo.lower() == 'cancela':
-                        print("Atualização cancelada.")
-                    else:
+                        print("Atualização de telefone fixo cancelada.")
+                    elif validar_telefone(novo):
                         contato[3] = novo
-                        print("Telefone fixo atualizado.")
+                        print("Telefone fixo atualizado com sucesso.")
+                    else:
+                        print("Telefone fixo inválido. Tente novamente.")
+                
                 elif opc == 4:
-                    novo = input("Digite o novo celular (ou 'cancela'): ").strip()
+                    novo = input("Digite o novo celular ((99) 00000-0000) ou 'cancela': ").strip()
                     if novo.lower() == 'cancela':
-                        print("Atualização cancelada.")
-                    else:
+                        print("Atualização de celular cancelada.")
+                    elif validar_celular(novo):
                         contato[4] = novo
-                        print("Celular atualizado.")
-                elif opc == 5:
-                    novo = input("Digite o novo e-mail (ou 'cancela'): ").strip()
-                    if novo.lower() == 'cancela':
-                        print("Atualização cancelada.")
+                        print("Celular atualizado com sucesso.")
                     else:
+                        print("Celular inválido. Tente novamente.")
+                
+                elif opc == 5:
+                    novo = input("Digite o novo e-mail ou 'cancela': ").strip()
+                    if novo.lower() == 'cancela':
+                        print("Atualização de e-mail cancelada.")
+                    elif validar_email(novo):
                         contato[5] = novo
-                        print("E-mail atualizado.")
-                else:
-                    print("Atualizações finalizadas.")
+                        print("E-mail atualizado com sucesso.")
+                    else:
+                        print("E-mail inválido. Tente novamente.")
+                
+                elif opc == 6:
+                    print("Finalizando atualizações.")
                     return
+                
+                else:
+                    print("Opção inválida. Tente novamente.")
         else:
             print("Contato não encontrado. Tente novamente.")
+
 
 
 def listar(agd):
@@ -227,11 +261,11 @@ apresenteSe()
 
 agenda=[]
 
-menu=['Cadastrar Contato',\
-      'Procurar Contato',\
-      'Atualizar Contato',\
-      'Listar Contatos',\
-      'Excluir Contato',\
+menu=['Cadastrar Contato',
+      'Procurar Contato',
+      'Atualizar Contato',
+      'Listar Contatos',
+      'Excluir Contato',
       'Sair do Programa']
 
 deseja_terminar_o_programa=False
@@ -248,7 +282,7 @@ while not deseja_terminar_o_programa:
         listar(agenda)
     elif opcao==5:
         excluir(agenda)
-    else: # opcao==6
+    else:
         deseja_terminar_o_programa=True
         
 print('PROGRAMA ENCERRADO COM SUCESSO!')
