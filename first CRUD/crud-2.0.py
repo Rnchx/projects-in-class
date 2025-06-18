@@ -7,6 +7,7 @@ def apresenteSe():
     print('| AGENDA PESSOAL DE ANIVERSÁRIOS E FORMAS DE CONTATAR PESSOAS |')
     print('|                                                             |')
     print('| João Pedro Cassan da Rocha                                  |')
+    print('| Marcelo Muller Del Mondo                                    |')
     print('|                                                             |')
     print('| Versão 2.0 de 26/05/2025                                    |')
     print('|                                                             |')
